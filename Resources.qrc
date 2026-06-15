@@ -27,5 +27,7 @@
         <file>v_sounds/v60.wav</file>
         <file>v_sounds/v61.wav</file>
         <file>v_sounds/v62.wav</file>
+        <file>config.txt</file>
+        <file>lessons.txt</file>
     </qresource>
 </RCC>

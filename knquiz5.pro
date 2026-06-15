@@ -8,12 +8,14 @@ CONFIG += c++17
 
 SOURCES += \
     fftstuff.cpp \
+    fileloader.cpp \
     main.cpp \
     quiz.cpp
 
 HEADERS += \
     fftstuff.h \
     fftw3/fftw3.h \
+    fileloader.h \
     quiz.h
 
 FORMS += \
@@ -30,6 +32,7 @@ DEPENDPATH += $$PWD/fftw3
 unix|win32: LIBS += -L$$PWD/fftw3/ -llibfftw3-3 -llibfftw3f-3 -llibfftw3l-3
 
 DISTFILES += \
+    config.txt \
     fftw3/COPYRIGHT \
     fftw3/fftw3.f \
     fftw3/fftw3.f03 \
@@ -38,6 +41,7 @@ DISTFILES += \
     fftw3/libfftw3-3.dll \
     fftw3/libfftw3f-3.dll \
     fftw3/libfftw3l-3.dll \
+    lessons.txt \
     v_sounds/click2.wav \
     v_sounds/click3.wav \
     v_sounds/click4.wav \

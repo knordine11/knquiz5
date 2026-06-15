@@ -70,6 +70,8 @@ class Widget : public QWidget
 public:
     explicit Widget(QWidget *parent = nullptr);
     ~Widget() override;
+    int nPos;
+    int tonicNote;
 
 private slots:
     void on_btnstart_clicked();

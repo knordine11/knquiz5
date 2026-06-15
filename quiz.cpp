@@ -1,6 +1,7 @@
 #include "quiz.h"
 #include "ui_quiz.h"
 #include "fftstuff.h"
+#include "fileloader.h"
 #include <qtimer.h>
 #include <math.h>
 #include <stdlib.h>
@@ -190,6 +191,8 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle("knquiz test");
+    FileLoader::ReadConfig();
+    FileLoader::ReadLesson();
     initializeAudioOutput(QMediaDevices::defaultAudioOutput());
     initializeAudioInput(QMediaDevices::defaultAudioInput());
     FftStuff fts;
@@ -225,8 +228,33 @@ void Widget::initializeAudioInput(const QAudioDevice &deviceInfo)
     m_Microphone->start();
 }
 
+void Widget::restartAudioStream()
+{
+    collectMicData = true;
+    m_Microphone->seek(0);
+    m_Microphone->stop();
+    m_Microphone->start();
+    m_audioSource->stop();
+    qDebug()<<" restartAudioStream() |  m_pullMode  "<<m_pullMode;
+    m_audioSource->start(m_Microphone.get());
+}
+
 void Widget::on_btnstart_clicked()
 {
     qDebug() << "starting...";
+    restartAudioStream();
+    QThread::msleep(100);
+    curLessonInt = currentlesson.toInt();
+    // get sound array set
+    tonicNote = tonic_map[gNote[curLessonInt-1]];
+    qDebug() << tonicNote;
+    qDebug() << gNote[curLessonInt-1];
+    FileLoader files;
+    files.GetFileList(tonicNote);
+    nPos = 0;
+    m_Speaker->newTest( rawRecArrays[orientation[nPos] - 1]);
+    m_Speaker->start();
+    m_audioOutput->stop();
+    m_audioOutput->start(m_Speaker.data());
 }
 
