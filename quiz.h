@@ -16,6 +16,7 @@ class Microphone : public QIODevice
 
 public:
     Microphone(const QAudioFormat &format);
+    ~Microphone();
 
     void start();
     void stop();
@@ -72,6 +73,20 @@ public:
 
 private slots:
     void on_btnstart_clicked();
+
+private:
+    void initializeAudioOutput(const QAudioDevice &deviceInfo);
+    void initializeAudioInput(const QAudioDevice &deviceInfo);
+    void restartAudioStream();
+
+private:
+    QMediaDevices *m_devicesOut = nullptr;
+    QSharedPointer<Microphone> m_Microphone;
+    QSharedPointer<QAudioSource> m_audioSource;
+    //QMediaDevices *m_devicesIn = nullptr;
+    QScopedPointer<Speaker> m_Speaker;
+    QScopedPointer<QAudioSink> m_audioOutput;
+    bool m_pullMode = false;
 
 private:
     Ui::Widget *ui;

@@ -52,6 +52,11 @@ Microphone::Microphone(const QAudioFormat &format) : m_format(format) {
     qDebug()<<" YOU SHOULD SEE THIS ";
 }
 
+Microphone::~Microphone()
+{
+
+}
+
 void Microphone::start()
 {
     collectMicData=true;
@@ -184,11 +189,40 @@ Widget::Widget(QWidget *parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
+    this->setWindowTitle("knquiz test");
+    initializeAudioOutput(QMediaDevices::defaultAudioOutput());
+    initializeAudioInput(QMediaDevices::defaultAudioInput());
+    FftStuff fts;
 }
 
 Widget::~Widget()
 {
     delete ui;
+}
+
+void Widget::initializeAudioOutput(const QAudioDevice &deviceInfo)
+{
+    qDebug() << "initializeAudioOutput...";
+    QAudioFormat format;
+    format.setSampleRate(44100);
+    format.setChannelCount(1);
+    format.setSampleFormat(QAudioFormat::Int16);
+    qDebug() << "     !!!   from  INIT format: " << format.sampleRate();
+    m_Speaker.reset(new Speaker());
+    m_audioOutput.reset(new QAudioSink(deviceInfo, format));
+}
+
+void Widget::initializeAudioInput(const QAudioDevice &deviceInfo)
+{
+    qDebug() << "initializeAudioInput...";
+    QAudioFormat format;
+    format.setSampleRate(44100);
+    format.setChannelCount(1);
+    format.setSampleFormat(QAudioFormat::Int16);
+
+    m_Microphone.reset(new Microphone(format));
+    m_audioSource.reset(new QAudioSource(deviceInfo, format));
+    m_Microphone->start();
 }
 
 void Widget::on_btnstart_clicked()
